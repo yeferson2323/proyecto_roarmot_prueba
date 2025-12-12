@@ -25,7 +25,8 @@ public class SecurityConfig {
                     "/validar-codigo",
                     "/guardar-usuario",
                     "/panel/ProductProcess",
-                    "/api/email/**"  // APIs públicas sin CSRF
+                    "/api/email/**",
+                    "/api/sos/buscar-servicios"  // APIs públicas sin CSRF
                 )
             )
             .authorizeHttpRequests(authorize -> authorize
@@ -43,6 +44,8 @@ public class SecurityConfig {
                 .requestMatchers("/css/**", "/js/**", "/imagenes/**", "/uploads/**", "/products/**", "/webjars/**",
                     "/favicon.ico", "/favicon.icon", "/error"
                 ).permitAll()
+
+                .requestMatchers("/sos", "/api/sos/**").authenticated() // solo a usuarios registrados
                 
                 // 3. PÁGINAS PÚBLICAS (sin autenticación)
                 .requestMatchers("/", "/login", "/RegistroPaso1", "/RegistroPaso2", "/RegistroPaso3").permitAll()
@@ -79,12 +82,21 @@ public class SecurityConfig {
                 .contentSecurityPolicy(csp -> csp
                     .policyDirectives(
                         "default-src 'self'; " +
-                        "script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://kit.fontawesome.com; " +
-                        "connect-src 'self' https://fonts.googleapis.com; " +
-                        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; " +
-                        "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; " +
-                        "img-src 'self' data: https:; " +
-                        "frame-ancestors 'none';"
+            
+                        // 1. SCRIPT-SRC: Permite la carga del script principal de Google Maps
+                        "script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://kit.fontawesome.com https://maps.googleapis.com; " + 
+                        
+                        // 2. CONNECT-SRC: Permite la conexión AJAX de la API de Maps
+                        "connect-src 'self' https://fonts.googleapis.com https://maps.googleapis.com https://*.googleapis.com; " + 
+                        
+                        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; " + 
+                        
+                        "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; " + 
+                        
+                        // 3. IMG-SRC: Permite los tiles del mapa, iconos y data URI (marcadores)
+                        "img-src 'self' data: https: https://maps.gstatic.com https://*.googleapis.com; " + 
+                        
+                        "frame-ancestors 'none'" // Notar que NO hay punto y coma aquí si es la última directiva.
 
                     ) // Imágenes locales y externas
                 )

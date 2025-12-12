@@ -3,8 +3,42 @@
     <field name="categoria" class="java.lang.String"/>
     <field name="total" class="java.lang.Integer"/>
     <field name="etiqueta" class="java.lang.String"/>
-    <title><band height="79"><staticText><reportElement x="100" y="20" width="355" height="39"/><textElement textAlignment="Center"><font size="20" isBold="true"/></textElement><text><![CDATA[REPORTE PRODUCTOS]]></text></staticText></band></title>
-    <columnHeader><band height="30"><staticText><reportElement x="50" y="0" width="100" height="30"/><text><![CDATA[CATEGORÍA]]></text></staticText><staticText><reportElement x="400" y="0" width="100" height="30"/><text><![CDATA[TOTAL]]></text></staticText></band></columnHeader>
-    <detail><band height="30"><textField><reportElement x="50" y="0" width="300" height="30"/><textFieldExpression><![CDATA[$F{categoria}]]></textFieldExpression></textField><textField><reportElement x="400" y="0" width="100" height="30"/><textFieldExpression><![CDATA[$F{total}]]></textFieldExpression></textField></band></detail>
-    <summary><band height="200"><staticText><reportElement x="0" y="10" width="555" height="20"/><text><![CDATA[Gráfico aquí]]></text></staticText></band></summary>
+    
+    <title><band height="79"><staticText><reportElement x="100" y="20" width="355" height="39" uuid="88e0e7a1-5707-4286-9a2c-90b144299b38"/><textElement textAlignment="Center"><font size="20" isBold="true"/></textElement><text><![CDATA[REPORTE PRODUCTOS]]></text></staticText></band></title>
+    
+    <columnHeader><band height="30"><staticText><reportElement x="50" y="0" width="100" height="30" uuid="b248a86a-6a56-427f-94a2-e42774a3f5a7"/><text><![CDATA[CATEGORÍA]]></text></staticText><staticText><reportElement x="400" y="0" width="100" height="30" uuid="09927909-0d17-4835-8959-86640c31c967"/><text><![CDATA[TOTAL]]></text></staticText></band></columnHeader>
+    
+    <detail><band height="30"><textField><reportElement x="50" y="0" width="300" height="30" uuid="2f093375-9989-4251-901c-d78401311029"/><textFieldExpression><![CDATA[$F{categoria}]]></textFieldExpression></textField><textField><reportElement x="400" y="0" width="100" height="30" uuid="308c0282-3d89-4b13-9a4d-e9e7c5b65f49"/><textFieldExpression><![CDATA[$F{total}]]></textFieldExpression></textField></band></detail>
+    
+    <summary>
+        <band height="200">
+            <barChart>
+                <chart evaluationTime="Report">
+                    <reportElement x="0" y="0" width="555" height="200" uuid="f0d2c332-95f2-4822-a744-b0d59247d79b"/>
+                    <chartTitle>
+                        <titleExpression><![CDATA["TOTAL DE PRODUCTOS POR CATEGORÍA"]]></titleExpression>
+                    </chartTitle>
+                    <chartSubtitle/>
+                    <chartLegend/>
+                </chart>
+                <categoryDataset>
+                    <categorySeries>
+                        <seriesExpression><![CDATA["Total"]]></seriesExpression>
+                        <categoryExpression><![CDATA[$F{categoria}]]></categoryExpression>
+                        <valueExpression><![CDATA[$F{total}]]></valueExpression>
+                    </categorySeries>
+                </categoryDataset>
+                <barPlot>
+                    <plot orientation="Horizontal"/>
+                    <itemLabel/>
+                    <categoryAxisFormat>
+                        <axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+                    </categoryAxisFormat>
+                    <valueAxisFormat>
+                        <axisFormat labelColor="#000000" tickLabelColor="#000000" axisLineColor="#000000"/>
+                    </valueAxisFormat>
+                </barPlot>
+            </barChart>
+        </band>
+    </summary>
 </jasperReport>

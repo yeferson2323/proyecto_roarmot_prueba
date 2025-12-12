@@ -122,7 +122,7 @@ public class ProductoService {
 	}
 	
 	// -----------------------------------------------------------------
-	// MÉTODO PARA ACTUALIZAR PRODUCTO (Edición Completa)
+	// MÉTODO PARA ACTUALIZAR PRODUCTO 
 	// -----------------------------------------------------------------
 	@Transactional 
 	public void update(ProductoFormDTO productoForm, String nombreArchivo, Long vendedorId, Long idProducto) {

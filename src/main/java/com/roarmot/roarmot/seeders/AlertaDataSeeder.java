@@ -30,7 +30,7 @@ public class AlertaDataSeeder implements CommandLineRunner {
     public void run(String... args) throws Exception {
         // Verificar si ya existen alertas para no duplicar
         if (alertaRepository.count() == 0) {
-            System.out.println("🌱 Insertando datos de prueba para alertas...");
+            System.out.println("Insertando datos de prueba para alertas...");
             
             // Obtener usuario de prueba (asumiendo que existe el usuario con ID 1)
             Usuario usuario = usuarioRepository.findById(1L)
@@ -43,7 +43,7 @@ public class AlertaDataSeeder implements CommandLineRunner {
             // Crear alertas de ejemplo
             crearAlertasEjemplo(usuario, moto);
             
-            System.out.println("✅ Datos de alertas insertados correctamente");
+            System.out.println("Datos de alertas insertados correctamente");
         }
     }
     
@@ -82,7 +82,7 @@ public class AlertaDataSeeder implements CommandLineRunner {
         alertaSoat.setIcono("warning");
         alertaSoat.setNivel("warning");
         
-        // Fecha SOAT corregida
+        // Fecha SOAT 
         alertaSoat.setVencimientoSoat(LocalDate.of(2025, 12, 15));
         
         alertaSoat.setAccionUrl("/renovar-soat");
@@ -99,7 +99,7 @@ public class AlertaDataSeeder implements CommandLineRunner {
         alertaTecno.setIcono("warning");
         alertaTecno.setNivel("warning");
         
-        // Fecha Tecnomecánica corregida
+        // Fecha Tecnomecánica 
         alertaTecno.setVencimientoTecnomecanica(LocalDate.of(2025, 12, 20));
         
         alertaTecno.setAccionUrl("/agendar-tecnomecanica");

@@ -446,6 +446,582 @@
         };
         
         console.log('Script de gestión de motos cargado correctamente');
-        
+
+        // =========================================================
+        //      POSICIONAMIENTO RESPONSIVO DE BOTONES DE MOTOS
+        // =========================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Función para posicionar los botones de forma absoluta fuera del clip-path
+            function positionMotoButtons() {
+                const buttonsContainer = document.getElementById('moto-selector-buttons'); // Asegúrate de que este es el ID
+                const imagenContainer = document.querySelector('.clip-moto'); 
+                
+                if (!buttonsContainer || !imagenContainer) {
+                    // Si no se encuentran los contenedores, salimos.
+                    return;
+                }
+
+                // 1. Obtener la posición del contenedor de la imagen
+                const imagenRect = imagenContainer.getBoundingClientRect();
+                
+                // 2. Calcular la posición deseada para los botones:
+                
+                // Posición TOP: Centrar verticalmente en la imagen
+                // imageRect.top es la posición superior de la imagen respecto al viewport.
+                // imageRect.height es la altura de la imagen.
+                const topPosition = imagenRect.top + (imagenRect.height / 2);
+                
+                // Posición LEFT: Colocar los botones justo donde empieza la imagen (left side del viewport)
+                // Se resta el ancho de los botones (aprox 40px) y un margen (15px) para que queden afuera.
+                // Usamos la posición LEFT del contenedor de la imagen.
+                const leftPosition = imagenRect.left - 40 - 15; // 40px (ancho del botón) + 15px (margen)
+
+                
+                // 3. Aplicar estilos ABSOLUTOS (asumiendo que los botones tienen 'position: absolute' en CSS/Tailwind)
+                
+                // Usamos window.scrollY para compensar el desplazamiento vertical,
+                // asegurando que la posición sea relativa al DOCUMENTO y no solo al viewport.
+                buttonsContainer.style.position = 'absolute';
+                buttonsContainer.style.top = `${topPosition + window.scrollY}px`;
+                buttonsContainer.style.left = `${leftPosition + window.scrollX}px`;
+                
+                // Centrado vertical final (ya que topPosition es el centro de la imagen)
+                buttonsContainer.style.transform = 'translateY(-20%)'; 
+                
+                // Log para verificación
+                // console.log('Posicionamiento de botones:', {
+                //     top: topPosition,
+                //     left: leftPosition,
+                //     scroll: window.scrollY
+                // });
+            }
+            
+            // 2. Ejecutar y re-ejecutar al cargar, redimensionar y hacer scroll
+            
+            // Usar requestAnimationFrame para la primera ejecución después de que el navegador calcule el layout.
+            requestAnimationFrame(positionMotoButtons);
+            
+            // Ejecutar en eventos
+            window.addEventListener('load', positionMotoButtons);
+            window.addEventListener('resize', positionMotoButtons);
+            window.addEventListener('scroll', positionMotoButtons); // Importante para posicionamiento fijo al viewport
+        });
+
+        // =========================================================
+        //     CARRUSEL DE TIPS PARA MOTEROS (MANTENIENDO DISEÑO ORIGINAL)
+        // =========================================================
+        function inicializarCarruselTips() {
+            console.log('Inicializando carrusel de tips...');
+            
+            const carruselContainer = document.getElementById('tips-carousel-container');
+            const innerWrapper = document.getElementById('tips-inner-wrapper');
+            const items = document.querySelectorAll('#tips-inner-wrapper .carousel-item');
+            const indicators = document.querySelectorAll('.carousel-indicator');
+            
+            // CORRECCIÓN: !carrelContainer debe ser !carruselContainer
+            if (!carruselContainer || !innerWrapper || items.length === 0) {
+                console.error('Elementos del carrusel no encontrados (container, wrapper o items)');
+                return;
+            }
+            
+            console.log(`Carrusel encontrado con ${items.length} items`);
+            
+            let currentIndex = 0;
+            const totalItems = items.length;
+            let intervalo = null;
+            const intervaloTime = 5000; // 5 segundos por slide
+            
+            // 1. CONFIGURACIÓN MÍNIMA PARA EL CARRUSEL
+            // Solo lo absolutamente necesario para que 'flex' y 'transition' funcionen
+            innerWrapper.style.display = 'flex';
+            innerWrapper.style.transition = 'transform 0.5s ease-in-out';
+            
+            // 2. FUNCIÓN PRINCIPAL PARA MOVER EL CARRUSEL
+            function irASlide(index, animate = true) {
+                // Lógica de bucle infinito (loop)
+                if (index < 0) {
+                    // Si el índice es negativo, vamos al último
+                    index = totalItems - 1;
+                } else if (index >= totalItems) {
+                    // Si el índice supera el total, vamos al primero
+                    index = 0;
+                }
+                
+                currentIndex = index;
+                
+                const anchoContenedor = carruselContainer.clientWidth;
+                
+                // Desactivar temporalmente la transición para el cambio instantáneo
+                if (!animate) {
+                    innerWrapper.style.transition = 'none';
+                }
+
+                // Solo transformación horizontal
+                const translateX = -(currentIndex * anchoContenedor);
+                innerWrapper.style.transform = `translateX(${translateX}px)`;
+                
+                // Reactivar la transición después de un breve momento
+                if (!animate) {
+                    requestAnimationFrame(() => {
+                        innerWrapper.style.transition = 'transform 0.5s ease-in-out';
+                    });
+                }
+                
+                // Actualizar indicadores
+                actualizarIndicadores();
+                
+                console.log(`Cambiando a slide ${currentIndex + 1}/${totalItems}`);
+            }
+            
+            // 3. Actualizar indicadores activos
+            function actualizarIndicadores() {
+                indicators.forEach((indicator, index) => {
+                    // Usamos las clases de Tailwind
+                    if (index === currentIndex) {
+                        indicator.classList.add('active', 'bg-white');
+                        indicator.classList.remove('bg-gray-500');
+                    } else {
+                        indicator.classList.remove('active', 'bg-white');
+                        indicator.classList.add('bg-gray-500');
+                    }
+                });
+            }
+            
+            // 4. Siguiente slide
+            function siguienteSlide() {
+                irASlide(currentIndex + 1);
+            }
+            
+            // 5. Iniciar/Detener carrusel automático
+            function iniciarCarruselAutomatico() {
+                detenerCarruselAutomatico();
+                intervalo = setInterval(siguienteSlide, intervaloTime);
+            }
+            
+            function detenerCarruselAutomatico() {
+                if (intervalo) {
+                    clearInterval(intervalo);
+                    intervalo = null;
+                }
+            }
+            
+            function reiniciarCarruselAutomatico() {
+                detenerCarruselAutomatico();
+                iniciarCarruselAutomatico();
+            }
+
+            // 6. Configurar eventos para indicadores
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    irASlide(index);
+                    reiniciarCarruselAutomatico(); // Reinicia el contador al interactuar
+                });
+            });
+            
+            // 7. Pausar al hacer hover
+            carruselContainer.addEventListener('mouseenter', detenerCarruselAutomatico);
+            carruselContainer.addEventListener('mouseleave', iniciarCarruselAutomatico);
+            
+            // 8. Inicializar la configuración de anchos
+            function configurarAnchos() {
+                const anchoFinal = carruselContainer.clientWidth;
+                
+                if (anchoFinal === 0) {
+                    console.warn('El ancho del contenedor es 0. Intentando de nuevo en 300ms.');
+                    setTimeout(configurarAnchos, 300);
+                    return;
+                }
+                
+                // Aplicar ancho final a cada item y ajustar el wrapper
+                items.forEach(item => {
+                    // Asegurar que cada item ocupe el ancho del contenedor
+                    item.style.minWidth = `${anchoFinal}px`;
+                    item.style.maxWidth = `${anchoFinal}px`;
+                    item.style.width = `${anchoFinal}px`;
+                    item.style.flexShrink = '0'; 
+                    
+                    // Reajuste del contenido interno para mantener el diseño
+                    const contenido = item.querySelector('.skew-content-c');
+                    if (contenido) {
+                        // Asegurar que el contenido interno tome el ancho completo disponible después de los paddings/margins
+                        contenido.style.width = '100%';
+                    }
+                });
+                
+                // Ajustar ancho total del wrapper (importante para que el flex funcione bien)
+                innerWrapper.style.width = `${totalItems * anchoFinal}px`;
+                
+                // Posicionar en el slide actual (o 0) sin animación para el primer ajuste
+                irASlide(currentIndex, false); 
+                
+                console.log('✅ Carrusel inicializado manteniendo diseño original');
+                console.log('Ancho por slide:', anchoFinal, 'px');
+
+                // Iniciar carrusel automático
+                iniciarCarruselAutomatico();
+            }
+
+            // 9. Manejo de redimensionamiento
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                detenerCarruselAutomatico(); // Detener durante el redimensionamiento
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    configurarAnchos(); // Re-ejecutar la configuración de anchos
+                    reiniciarCarruselAutomatico(); // Re-iniciar el carrusel
+                }, 250);
+            });
+            
+            // Llamar a la función de configuración inicial
+            configurarAnchos();
+        }
+
+        // =========================================================
+        //     INTEGRACIÓN CON TU SCRIPT EXISTENTE
+        // =========================================================
+        // Integración simplificada para asegurar la ejecución
+        document.addEventListener('DOMContentLoaded', function() {
+            // Esperar un breve momento para asegurar que Tailwind haya aplicado los estilos base
+            setTimeout(inicializarCarruselTips, 500); 
+        });
+
+        window.addEventListener('load', function() {
+            // También ejecutar al cargar completamente la página (incluidas imágenes)
+            setTimeout(inicializarCarruselTips, 300);
+        });
+
+        // =========================================================
+        //   Scrip para el funcionamiento de las alertas por medio del SEEDERS
+        // =========================================================
+
+        // CONFIGURACIÓN - AJUSTA ESTOS VALORES
+        const USUARIO_ID = 1; // Cambia esto por el ID del usuario logueado
+        const API_URL = 'http://localhost:8080/api/alertas/usuario/' + USUARIO_ID;
+
+        // COLOR PRINCIPAL #1E2333
+        const COLOR_PRINCIPAL = '#1E2333';
+
+        // Cargar alertas cuando la página cargue
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarAlertas();
+        });
+
+        async function cargarAlertas() {
+            const container = document.getElementById('alertas-container');
+            
+            try {
+                console.log('Solicitando alertas desde:', API_URL);
+                
+                const response = await fetch(API_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`Error del servidor: ${response.status}`);
+                }
+                
+                const alertas = await response.json();
+                console.log('Alertas recibidas:', alertas);
+                
+                // Mostrar las alertas
+                mostrarAlertasHTML(alertas);
+                
+            } catch (error) {
+                console.error('Error al cargar alertas:', error);
+                
+                // Mostrar mensaje de error
+                container.innerHTML = `
+                    <div class="text-center py-6">
+                        <div class="text-red-500 text-2xl mb-2">⚠️</div>
+                        <p class="text-gray-700">No se pudieron cargar las alertas</p>
+                        <p class="text-sm text-gray-500 mt-1">${error.message}</p>
+                        <button onclick="cargarAlertas()" 
+                                class="mt-3 px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm hover:bg-blue-200">
+                            Reintentar
+                        </button>
+                    </div>
+                `;
+                
+                // Mostrar datos de ejemplo como respaldo
+                mostrarDatosEjemplo();
+            }
+        }
+
+        function mostrarAlertasHTML(alertas) {
+            const container = document.getElementById('alertas-container');
+            
+            if (!alertas || alertas.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-6">
+                        <div class="text-gray-400 text-3xl mb-2">🔔</div>
+                        <p class="text-gray-500">No tienes alertas programadas</p>
+                        <p class="text-sm text-gray-400 mt-1">Todo está al día</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            
+            alertas.forEach(alerta => {
+                // Determinar colores según tipo
+                let colores = getColoresPorTipo(alerta.tipo);
+                
+                html += `
+                <div class="mb-4 p-5 rounded-xl shadow-sm transition-all duration-300 hover:shadow-md" 
+                    style="background: ${COLOR_PRINCIPAL}; border-left: 4px solid ${colores.borde};">
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-start space-x-4">
+                            <!-- Ícono con fondo del color específico del tipo -->
+                            <div class="flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center" 
+                                style="background: ${colores.badgeBg}">
+                                <span class="text-white text-lg">
+                                    ${getEmojiIcono(alerta.tipo)}
+                                </span>
+                            </div>
+                            
+                            <!-- Contenido -->
+                            <div class="flex-1">
+                                <div class="flex items-center">
+                                    <h4 class="font-bold text-lg" style="color: ${colores.texto}">${alerta.titulo}</h4>
+                                    ${!alerta.leida ? 
+                                        '<span class="ml-2 h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>' : 
+                                        ''}
+                                </div>
+                                
+                                <p class="mt-2 text-gray-300">${alerta.mensaje}</p>
+                                
+                                <!-- Fechas si existen -->
+                                ${mostrarFechas(alerta)}
+                                
+                                <!-- Moto si existe -->
+                                ${alerta.moto ? `
+                                <div class="mt-3 text-sm" style="color: ${colores.texto}">
+                                    <span class="font-medium">🏍️ Moto:</span> 
+                                    ${alerta.moto.marcaMoto || ''} ${alerta.moto.modeloMoto || ''}
+                                </div>
+                                ` : ''}
+                                
+                                <!-- Botón de acción si existe -->
+                                ${alerta.accionUrl ? `
+                                <div class="mt-4">
+                                    <a href="${alerta.accionUrl}" 
+                                    class="inline-flex items-center px-4 py-2 rounded-lg font-medium transition-all hover:scale-105"
+                                    style="background: ${colores.boton}; color: white;">
+                                        ${alerta.accionTexto}
+                                        <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                        
+                        <!-- Badge tipo -->
+                        <span class="text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wide"
+                            style="background: ${colores.badge}; color: ${colores.badgeText}; border: 1px solid ${colores.badgeBorder};">
+                            ${alerta.tipo}
+                        </span>
+                    </div>
+                    
+                    <!-- Estado -->
+                    <div class="mt-4 pt-3 border-t" style="border-color: rgba(255,255,255,0.1);">
+                        <div class="flex justify-between text-xs">
+                            <span style="color: ${colores.texto}">
+                                ${alerta.activa ? ' Activa' : 'Inactiva'}
+                            </span>
+                            <span class="text-gray-400">
+                                ${alerta.leida ? 'Leída' : 'No leída'}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function mostrarFechas(alerta) {
+            let html = '';
+            
+            const fechas = [
+                { campo: alerta.vencimientoSoat, label: 'SOAT', icono: '📋' },
+                { campo: alerta.vencimientoTecnomecanica, label: 'Tecnomecánica', icono: '🔧' },
+                { campo: alerta.vencimientoLicenciaConduccion, label: 'Licencia', icono: '📄' },
+                { campo: alerta.mantenimientoGeneral, label: 'Mantenimiento', icono: '⚙️' }
+            ];
+            
+            let hayFechas = false;
+            let fechasHTML = '';
+            
+            fechas.forEach(fecha => {
+                if (fecha.campo) {
+                    hayFechas = true;
+                    fechasHTML += `
+                    <div class="flex items-center mt-2">
+                        <span class="mr-2">${fecha.icono}</span>
+                        <span class="text-sm text-gray-400 mr-2">${fecha.label}:</span>
+                        <span class="text-sm text-white font-medium">${formatearFecha(fecha.campo)}</span>
+                    </div>
+                    `;
+                }
+            });
+            
+            if (hayFechas) {
+                html = `
+                <div class="mt-3 p-3 rounded-lg" style="background: rgba(0,0,0,0.2);">
+                    ${fechasHTML}
+                </div>
+                `;
+            }
+            
+            return html;
+        }
+
+        function getColoresPorTipo(tipo) {
+            // Colores que contrastan bien con #1E2333
+            switch(tipo) {
+                case 'SOAT':
+                    return {
+                        borde: '#EF4444', // Rojo
+                        texto: '#FCA5A5', // Rojo claro
+                        badge: '#DC2626', // Rojo oscuro
+                        badgeText: '#FFFFFF',
+                        badgeBg: '#EF4444', // Rojo
+                        badgeBorder: '#B91C1C', // Rojo más oscuro
+                        boton: '#DC2626' // Rojo oscuro
+                    };
+                case 'TECNOMECANICA':
+                    return {
+                        borde: '#F59E0B', // Ámbar
+                        texto: '#FCD34D', // Ámbar claro
+                        badge: '#D97706', // Ámbar oscuro
+                        badgeText: '#FFFFFF',
+                        badgeBg: '#F59E0B', // Ámbar
+                        badgeBorder: '#B45309', // Ámbar más oscuro
+                        boton: '#D97706' // Ámbar oscuro
+                    };
+                case 'PROMOCION':
+                    return {
+                        borde: '#10B981', // Esmeralda
+                        texto: '#A7F3D0', // Esmeralda claro
+                        badge: '#059669', // Esmeralda oscuro
+                        badgeText: '#FFFFFF',
+                        badgeBg: '#10B981', // Esmeralda
+                        badgeBorder: '#047857', // Esmeralda más oscuro
+                        boton: '#059669' // Esmeralda oscuro
+                    };
+                case 'LICENCIA':
+                    return {
+                        borde: '#3B82F6', // Azul
+                        texto: '#93C5FD', // Azul claro
+                        badge: '#1D4ED8', // Azul oscuro
+                        badgeText: '#FFFFFF',
+                        badgeBg: '#3B82F6', // Azul
+                        badgeBorder: '#1E40AF', // Azul más oscuro
+                        boton: '#1D4ed8' // Azul oscuro
+                    };
+                case 'MANTENIMIENTO':
+                    return {
+                        borde: '#8B5CF6', // Violeta
+                        texto: '#C4B5FD', // Violeta claro
+                        badge: '#7C3AED', // Violeta oscuro
+                        badgeText: '#FFFFFF',
+                        badgeBg: '#8B5CF6', // Violeta
+                        badgeBorder: '#6D28D9', // Violeta más oscuro
+                        boton: '#7C3AED' // Violeta oscuro
+                    };
+                default:
+                    return {
+                        borde: '#6B7280', // Gris
+                        texto: '#D1D5DB', // Gris claro
+                        badge: '#4B5563', // Gris oscuro
+                        badgeText: '#FFFFFF',
+                        badgeBg: '#6B7280', // Gris
+                        badgeBorder: '#374151', // Gris más oscuro
+                        boton: '#4B5563' // Gris oscuro
+                    };
+            }
+        }
+
+        function getEmojiIcono(tipo) {
+            switch(tipo) {
+                case 'SOAT': return '🚨';
+                case 'TECNOMECANICA': return '🔧';
+                case 'PROMOCION': return '🎁';
+                case 'MANTENIMIENTO': return '⚙️';
+                case 'LICENCIA': return '📄';
+                default: return '🔔';
+            }
+        }
+
+        function formatearFecha(fechaStr) {
+            if (!fechaStr) return '';
+            const fecha = new Date(fechaStr);
+            return fecha.toLocaleDateString('es-ES', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        }
+
+        // Función para mostrar datos de ejemplo si falla la API
+        function mostrarDatosEjemplo() {
+            const datosEjemplo = [
+                {
+                    tipo: "SOAT",
+                    titulo: "SOAT próximo a vencer",
+                    mensaje: "Tu SOAT vence el 15 de Diciembre 2025. Renueva para evitar multas.",
+                    vencimientoSoat: "2025-12-15",
+                    accionUrl: "/renovar-soat",
+                    accionTexto: "Renovar SOAT",
+                    leida: false,
+                    activa: true
+                },
+                {
+                    tipo: "TECNOMECANICA",
+                    titulo: "Tecnomecánica próxima a vencer",
+                    mensaje: "Tu revisión tecnomecánica vence el 20 de Diciembre 2025.",
+                    vencimientoTecnomecanica: "2025-12-20",
+                    accionUrl: "/agendar-tecnomecanica",
+                    accionTexto: "Agendar cita",
+                    leida: false,
+                    activa: true
+                }
+            ];
+            
+            mostrarAlertasHTML(datosEjemplo);
+        }
+
+        // Añadir estilos CSS para mejorar la apariencia
+        const style = document.createElement('style');
+        style.textContent = `
+            .alerta-item {
+                transition: all 0.3s ease;
+            }
+            
+            .alerta-item:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            }
+            
+            .badge-alerta {
+                font-size: 0.7rem;
+                letter-spacing: 0.05em;
+            }
+            
+            /* Animación para alertas no leídas */
+            @keyframes pulse-alerta {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.5; }
+            }
+            
+            .alerta-no-leida {
+                animation: pulse-alerta 2s infinite;
+            }
+        `;
+        document.head.appendChild(style);
+
     </script>
 </div>

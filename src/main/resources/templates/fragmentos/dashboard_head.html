@@ -408,6 +408,153 @@
             }
         }
 
+        /* ===== BOTONES DE SELECCIÓN - ESTADOS NORMAL/HOVER ===== */
+        .moto-selector-btn {
+            width: 40px;
+            height: 40px;
+            background-color: #6993b4;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: width 0.3s ease, transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 500;
+            padding: 0;
+        }
+
+        /* Estado normal - SOLO NÚMERO */
+        .btn-state-normal {
+            font-size: 16px;
+            display: block;
+        }
+
+        /* Estado hover - TEXTO COMPLETO (oculto por defecto) */
+        .btn-state-hover {
+            font-size: 12px;
+            display: none;
+            white-space: nowrap;
+            padding: 0 12px;
+        }
+
+        /* HOVER: Cambia tamaño y muestra texto (ANIMACIÓN INVERTIDA) */
+        .moto-selector-btn:hover {
+            width: 120px;
+            transform: translateX(-80px); /* MUEVE A LA IZQUIERDA */
+        }
+
+        .moto-selector-btn:hover .btn-state-normal {
+            display: none;
+        }
+
+        .moto-selector-btn:hover .btn-state-hover {
+            display: block;
+        }
+
+        /* Botón activo */
+        .moto-selector-btn.active {
+            background-color: #6993b4;
+        }
+
+        /* Botón Agregar Moto especial */
+        .add-moto-btn {
+            background-color: #6993b4;
+        }
+
+        .add-moto-btn:hover {
+            background-color: #6993b4;
+        }
+
+        /* ===== ESTILOS PARA VISTA SOS ===== */
+        /* Estilos básicos para coincidir con su fondo y bordes VISTA SOS */
+        body {
+            /* Aunque el body ya tiene la clase bg-[#0D1118], esto asegura consistencia */
+            background-color: #0D1118;
+            color: #E6E6E6;
+        }
+        .main-container {
+            /* 1 pixel de borde con su color específico */
+            border: 1px solid #5C7589; 
+            background-color: #161B22; 
+        }
+        /* Asegurar que el ID del mapa tenga la altura definida */
+        #mapa {
+            height: 50vh; /* ¡ESTO LO ARREGLA! */
+            /* Opcional: Asegurar que tome el 100% del ancho del padre */
+            width: 100%; 
+        }
+
+
+        /* Estilo para el título de Asistente Carretera*/
+
         
+
+        .titulo-sos {
+            position: relative; 
+            display: inline-block; 
+            padding: 2px 20px 2px 20px; /* Ajusta el padding para que la barra se vea bien */
+            z-index: 3; 
+            /* El color blanco y el tamaño ya se controlan con las clases de Tailwind */
+            top: -3px;
+            transform: skew(-15deg)
+
+            
+        }
+        
+        /* 1. Contenedor al que se le aplicará el scroll */
+        #resultados-lista {
+            /* (Ya tiene max-height y overflow-y: auto) */
+            /* Asegúrate de que el contenedor use el motor WebKit para scroll */
+            scrollbar-width: thin;
+            scrollbar-color: #339786 #161B22; /* Color de la barra / Color del track (fondo) */
+        }
+
+        /* 2. Estilo del Scrollbar (Pista o Fondo) */
+        #resultados-lista::-webkit-scrollbar {
+            width: 8px; /* Ancho de la barra de desplazamiento */
+            background-color: #161B22; /* Color de fondo del track (el mismo que el contenedor) */
+        }
+
+        /* 3. Estilo del Thumb (La Barra que se mueve) */
+        #resultados-lista::-webkit-scrollbar-thumb {
+            background-color: #339786; /* Tu color principal (el verde azulado) */
+            border-radius: 4px; /* Bordes redondeados para la barra */
+            border: 1px solid #0d1118; /* Borde sutil para darle más profundidad */
+        }
+
+        /* 4. Estilo de Hover (Opcional: hacerla más clara al pasar el ratón) */
+        #resultados-lista::-webkit-scrollbar-thumb:hover {
+            background-color: #4aaba0; /* Un tono más claro al pasar el ratón */
+        }
+
+        /* Termina Estilo para el título de Asistente Carretera y barra de desplazaminto interno*/
+
+
+        /* ========Estilo del Scrollbar para toda la página (body) =======*/
+        body::-webkit-scrollbar {
+            width: 10px; /* Un poco más ancha que la interna si lo deseas */
+            background-color: #0D1118; /* El color de fondo de tu body */
+        }
+
+        /* Estilo del Thumb (La Barra que se mueve) */
+        body::-webkit-scrollbar-thumb {
+            background-color: #5C7589; /* Un tono neutro de tu tema para la barra principal */
+            border-radius: 5px; 
+            /* Borde para separar el thumb del track */
+            border: 2px solid #0D1118; 
+        }
+
+        /* Estilo de Hover (Opcional) */
+        body::-webkit-scrollbar-thumb:hover {
+            background-color: #788E9F; /* Un tono más claro al pasar el ratón */
+        }
+        /*====== Fin de Estilo del Scrollbar para toda la página (body) ====== */
+        
+
     </style>
 </head>

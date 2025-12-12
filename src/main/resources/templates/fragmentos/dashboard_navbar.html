@@ -6,10 +6,13 @@
         </div>
         
         <div class="flex flex-wrap justify-center items-center p-2 rounded-lg gap-1 md:gap-2">
-            <button class="flex items-center px-2 py-1 sm:px-3 sm:py-2 hover:bg-gray-700 rounded-lg transition transform hover:scale-110 text-sm sm:text-base">
+            <a th:href="@{/dashboard}" 
+                class="flex items-center px-2 py-1 sm:px-3 sm:py-2 hover:bg-gray-700 rounded-lg transition transform hover:scale-110 text-sm sm:text-base">
+                
                 <img th:src="@{imagenes/navbarImg/icoPanelControlBlanco.png}" alt="Panel" class="h-4 sm:h-5">
                 <span class="hidden sm:inline ml-1">Panel de control</span>
-            </button>
+                
+            </a>
             <button class="flex items-center px-2 py-1 sm:px-3 sm:py-2 hover:bg-gray-700 rounded-lg transition transform hover:scale-110 text-sm sm:text-base">
                 <img th:src="@{imagenes/navbarImg/icoCDABlanco.png}" alt="CDA" class="h-4 sm:h-5">
                 <span class="hidden sm:inline ml-1">CDA</span>
@@ -22,10 +25,15 @@
                 <img th:src="@{imagenes/navbarImg/tiendaBlanco.png}" alt="Tienda" class="h-4 sm:h-5">
                 <span class="hidden sm:inline ml-1">Tienda</span>
             </a>
-            <button class="px-3 py-2 hover:bg-red-500 rounded-lg transition transform hover:scale-125 text-sm sm:text-base">
-                <span class="sm:hidden">SOS</span>
-                <span class="hidden sm:inline ">SOS</span>
-            </button>
+            <a th:href="@{/sos}" 
+                class="inline-block" 
+                title="Asistencia en Carretera SOS">
+                
+                <button class="px-3 py-2 hover:bg-red-500 rounded-lg transition transform hover:scale-125 text-sm sm:text-base">
+                    <span class="sm:hidden">SOS</span>
+                    <span class="hidden sm:inline ">SOS</span>
+                </button>
+            </a>
         </div>
 
         <div class="flex items-center gap-2 mr-2 sm:mr-5">

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/dashboard_head :: head}">
+    <style>
+        .h-70vh {
+            height: 70vh; /* Altura considerable para el mapa */
+        }
+    </style>
+</head>
+
+<body class="bg-[#0D1118] text-gray-100 min-h-screen flex flex-col">
+
+    <nav th:replace="~{fragmentos/dashboard_navbar :: navbar}"></nav> 
+
+    <div class="h-[1.2px] w-full bg-gradient-to-r from-transparent via-red-600 to-transparent shadow-lg shadow-red-600/10"></div>
+
+    <div class="flex flex-1">
+        <div class="flex-1 overflow-x-hidden overflow-y-auto p-2 md:p-4">
+            <main>
+                <section class="p-4 md:p-8">
+                    
+
+                    <div class="max-w-[1321px] mx-auto">
+
+                        <h2 class="titulo-sos text-3xl font-extrabold text-white mb-2 ">Asistente en carretera</h2>
+
+                        <div class="border border-[#5C7589] rounded-lg p-4 grid grid-cols-1 lg:grid-cols-4 gap-6 bg-[#161B22]">
+                        
+                            <div class="lg:col-span-1 border border-[#5C7589] rounded-lg p-4 bg-[#161B22]">
+                                
+                                <h3 class="text-lg font-semibold mb-4 text-[#E6E6E6]">Opciones de Búsqueda</h3>
+
+                                <div class="mb-4">
+                                    <label for="ubicacion-actual" class="block text-sm font-medium mb-1">Mi Ubicación Actual:</label>
+                                    <input type="text" id="ubicacion-actual" value="Detectando..." readonly 
+                                        class="w-full p-2 bg-[#0D1118] border border-[#5C7589] rounded text-sm focus:outline-none"/>
+                                    <button type="button" id="btn-geolocalizar" 
+                                        class="mt-2 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded text-sm transition duration-200">
+                                        Detectar mi Posición
+                                    </button>
+                                </div>
+
+                                <h3 class="text-lg font-semibold mt-6 mb-3 border-t border-[#5C7589] pt-3 text-[#E6E6E6]">Asistencia Necesaria</h3>
+                                <div class="space-y-3">
+                                    <label class="flex items-center space-x-2 text-sm">
+                                        <input type="radio" name="tipo-asistencia" value="moto repair" checked class="form-radio h-4 w-4 text-red-600 border-gray-600 focus:ring-red-500">
+                                        <span>Talleres y Mecánicos</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 text-sm">
+                                        <input type="radio" name="tipo-asistencia" value="towing service" class="form-radio h-4 w-4 text-red-600 border-gray-600 focus:ring-red-500">
+                                        <span>Grúas y Auxilio Vial</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2 text-sm">
+                                        <input type="radio" name="tipo-asistencia" value="gas station" class="form-radio h-4 w-4 text-red-600 border-gray-600 focus:ring-red-500">
+                                        <span>Gasolineras</span>
+                                    </label>
+                                </div>
+
+                                <button type="button" id="btn-buscar" 
+                                    class="mt-6 w-full bg-[#5C7589] hover:bg-[#788E9F] text-white font-bold py-2 px-4 rounded transition duration-200">
+                                    Buscar Servicios Cerca
+                                </button>
+                            </div> 
+                            
+                            <div class="lg:col-span-3">
+                                
+                                <div id="mapa" class="border border-[#5C7589] rounded-lg mb-6 bg-[#161B22] flex items-center justify-center">
+                                    <p class="p-4 text-center text-gray-400">El mapa se cargará aquí...</p>
+                                </div>
+                                
+                                <div class="border border-[#5C7589] rounded-lg p-4 bg-[#161B22]">
+                                    <h3 class="text-lg font-semibold mb-3 border-b border-[#5C7589] pb-2 text-[#E6E6E6]">
+                                        Servicios Encontrados (<span id="count-results">0</span>)
+                                    </h3>
+                                    <div id="resultados-lista" class="text-gray-400 overflow-y-auto" style="max-height: 250px;">
+                                        <p>Presiona 'Detectar mi Posición' y luego 'Buscar Servicios Cerca' para iniciar.</p>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div> 
+                    </div>
+                    
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div th:replace="~{fragmentos/dashboard_SosScript :: scripts}"></div>
+    
+</body>
+</html>
