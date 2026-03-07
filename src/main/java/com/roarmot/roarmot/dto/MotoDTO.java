@@ -1,27 +1,34 @@
 package com.roarmot.roarmot.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 
 public class MotoDTO {
+    
+    private Long idDatosMoto; 
     private String marcaMoto;
     private String modeloMoto;
     private String colorMoto;
     private String imagenMoto;
+    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date soatMoto;
+    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date tecnomecanica;
+    
     private String placaMoto;
     private Integer kilometraje;
-    
-    // NOTA: No incluimos 'usuario' aquí, se asignará automáticamente
 
     // Constructor vacío
     public MotoDTO() {
     }
 
-    // Constructor con parámetros
-    public MotoDTO(String marcaMoto, String modeloMoto, String colorMoto, 
-                   String imagenMoto, Date soatMoto, Date tecnomecanica, 
+    // Constructor con parámetros (Actualizado para incluir idDatosMoto)
+    public MotoDTO(Long idDatosMoto, String marcaMoto, String modeloMoto, String colorMoto,
+                   String imagenMoto, Date soatMoto, Date tecnomecanica,
                    String placaMoto, Integer kilometraje) {
+        this.idDatosMoto = idDatosMoto;
         this.marcaMoto = marcaMoto;
         this.modeloMoto = modeloMoto;
         this.colorMoto = colorMoto;
@@ -33,27 +40,76 @@ public class MotoDTO {
     }
 
     // Getters y Setters
-    public String getMarcaMoto() { return marcaMoto; }
-    public void setMarcaMoto(String marcaMoto) { this.marcaMoto = marcaMoto; }
+    
+    public Long getIdDatosMoto() {
+        return idDatosMoto;
+    }
+    
+    public void setIdDatosMoto(Long idDatosMoto) {
+        this.idDatosMoto = idDatosMoto;
+    }
 
-    public String getModeloMoto() { return modeloMoto; }
-    public void setModeloMoto(String modeloMoto) { this.modeloMoto = modeloMoto; }
+    public String getMarcaMoto() { 
+        return marcaMoto; 
+    }
+    
+    public void setMarcaMoto(String marcaMoto) { 
+        this.marcaMoto = marcaMoto; 
+    }
 
-    public String getColorMoto() { return colorMoto; }
-    public void setColorMoto(String colorMoto) { this.colorMoto = colorMoto; }
+    public String getModeloMoto() { 
+        return modeloMoto; 
+    }
+    
+    public void setModeloMoto(String modeloMoto) { 
+        this.modeloMoto = modeloMoto; 
+    }
 
-    public String getImagenMoto() { return imagenMoto; }
-    public void setImagenMoto(String imagenMoto) { this.imagenMoto = imagenMoto; }
+    public String getColorMoto() { 
+        return colorMoto; 
+    }
+    
+    public void setColorMoto(String colorMoto) { 
+        this.colorMoto = colorMoto; 
+    }
 
-    public Date getSoatMoto() { return soatMoto; }
-    public void setSoatMoto(Date soatMoto) { this.soatMoto = soatMoto; }
+    public String getImagenMoto() { 
+        return imagenMoto; 
+    }
+    
+    public void setImagenMoto(String imagenMoto) { 
+        this.imagenMoto = imagenMoto; 
+    }
 
-    public Date getTecnomecanica() { return tecnomecanica; }
-    public void setTecnomecanica(Date tecnomecanica) { this.tecnomecanica = tecnomecanica; }
+    public Date getSoatMoto() { 
+        return soatMoto; 
+    }
+    
+    public void setSoatMoto(Date soatMoto) { 
+        this.soatMoto = soatMoto; 
+    }
 
-    public String getPlacaMoto() { return placaMoto; }
-    public void setPlacaMoto(String placaMoto) { this.placaMoto = placaMoto; }
+    public Date getTecnomecanica() { 
+        return tecnomecanica; 
+    }
+    
+    public void setTecnomecanica(Date tecnomecanica) { 
+        this.tecnomecanica = tecnomecanica; 
+    }
 
-    public Integer getKilometraje() { return kilometraje; }
-    public void setKilometraje(Integer kilometraje) { this.kilometraje = kilometraje; }
+    public String getPlacaMoto() { 
+        return placaMoto; 
+    }
+    
+    public void setPlacaMoto(String placaMoto) { 
+        this.placaMoto = placaMoto; 
+    }
+
+    public Integer getKilometraje() { 
+        return kilometraje; 
+    }
+    
+    public void setKilometraje(Integer kilometraje) { 
+        this.kilometraje = kilometraje; 
+    }
 }

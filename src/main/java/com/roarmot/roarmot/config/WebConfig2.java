@@ -13,7 +13,7 @@ public class WebConfig2 implements WebMvcConfigurer {
     
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        System.out.println("🟢 [WEBCONFIG2] Configurando...");
+        System.out.println("[WEBCONFIG2] Configurando...");
         
         // 1. Static (CSS, JS, imágenes fijas) - CORREGIDO
         registry.addResourceHandler("/**")

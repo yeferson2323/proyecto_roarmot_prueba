@@ -2,6 +2,9 @@ package com.roarmot.roarmot.Services;
 
 import com.roarmot.roarmot.models.Usuario;
 import com.roarmot.roarmot.repositories.UsuarioRepository;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -77,4 +80,5 @@ public class CustomUserDetailsService implements UserDetailsService {
         // .orElse(null) nos permite devolver null si el usuario no existe.
         return usuarioRepository.findByEmail(email).orElse(null); 
     }
+    
 }
