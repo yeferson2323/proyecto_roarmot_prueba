@@ -30,19 +30,20 @@ public class AlertaDataSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
+        // Evitar duplicar datos
         if (alertaRepository.count() > 0) {
             return;
         }
 
         System.out.println("Insertando datos de prueba para alertas...");
 
-        // Buscar cualquier usuario existente o crear uno
+        // Buscar usuario existente o crearlo
         Usuario usuario = usuarioRepository.findAll()
                 .stream()
                 .findFirst()
                 .orElseGet(this::crearUsuarioEjemplo);
 
-        // Buscar cualquier moto existente o crear una
+        // Buscar moto existente o crear una
         Moto moto = motoRepository.findAll()
                 .stream()
                 .findFirst()
@@ -78,6 +79,9 @@ public class AlertaDataSeeder implements CommandLineRunner {
         moto.setModeloMoto("MT-09");
         moto.setColorMoto("Negro");
         moto.setPlacaMoto("ABC123");
+
+        // Campo obligatorio en la base de datos
+        moto.setKilometraje(0);
 
         Calendar cal = Calendar.getInstance();
 
